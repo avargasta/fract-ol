@@ -25,28 +25,23 @@ OBJ = $(SRC:.c=.o)
 
 LIBMLX_DIR	:= ./MLX42
 LIBFT_DIR := ./LIBFT
-PRINTF_DIR := ./PRINTF
 
 LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a
 LIBFT = $(LIBFT_DIR)/libft.a
-PRINTF = $(PRINTF_DIR)/libftprintf.a
 
-LIBS := $(LIBMLX) -ldl -lglfw -pthread -lm $(LIBFT) $(PRINTF)
+LIBS := $(LIBMLX) -ldl -lglfw -pthread -lm $(LIBFT)
 
 HEADERS	:= -I ./ -I $(LIBMLX_DIR)/include -I $(LIBFT_DIR)
 
 
 #Rules
-all: $(LIBMLX) $(LIBFT) $(PRINTF) $(NAME)
+all: $(LIBMLX) $(LIBFT) $(NAME)
 
 $(LIBMLX):
 	@cmake $(LIBMLX_DIR) -B $(LIBMLX_DIR)/build && make -C $(LIBMLX_DIR)/build -j4
 
 $(LIBFT):
 	@make bonus -C $(LIBFT_DIR)
-
-$(PRINTF):
-	@make -C $(PRINTF_DIR)
 
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(LIBS) -o $(NAME)

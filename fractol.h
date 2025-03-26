@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <string.h>
 #include "MLX42/include/MLX42/MLX42.h"
-#include "PRINTF/ft_printf.h"
 #include "LIBFT/libft.h"
 #define WIDTH 1280
 #define HEIGHT 720

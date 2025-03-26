@@ -33,7 +33,7 @@ void parse_argv(t_fractal *fractal, int argc, char **argv)
 
 void	throw_error(char *str, t_fractal *fractal)
 {
-	ft_printf("Error: %s\n", str);
+	ft_putstr_fd(str, 1);
 	if (fractal->mlx)
 	{
 		mlx_close_window(fractal->mlx);
