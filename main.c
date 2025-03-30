@@ -19,16 +19,48 @@ void init(t_fractal *fractal, int argc, char **argv)
 	start_mlx(mlx_init(WIDTH, HEIGHT, "Fractol", true), fractal);
 }
 
+double	ft_atod(const char *str)
+{
+	size_t	i;
+	double		dec;
+	double		sign;
+	double		num;
+
+	i = 0;
+	dec = 1;
+	sign = 1;
+	num = abs(ft_atoi(str));
+	while (str[i] != '.')
+	{
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	i++;
+	while (str[i] >= '0' && str[i] <= '9' && str[i] != '\0')
+	{
+		dec = 0.1 * dec;
+		num = num + dec * (str[i] - '0');
+		i++;
+	}
+	return (num * sign);
+}
+
 void parse_argv(t_fractal *fractal, int argc, char **argv)
 {
 	if (argc == 1)
 		throw_error("enter mandelbrot or julia", fractal);
 	if (ft_strncmp(argv[1], "mandelbrot", 10) == 0 && argc == 2)
 		fractal->name = MANDELBROT;
-	else if (ft_strncmp(argv[1], "julia", 5) == 0 && argc == 2)
-		fractal->name = JULIA; //TO DO
+	else if (ft_strncmp(argv[1], "julia", 5) == 0 && argc == 4)
+	{
+		fractal->name = JULIA;
+		fractal->x_julia = ft_atod(argv[2]);
+		fractal->y_julia = ft_atod(argv[3]);
+		printf("x_julia: %f, y_julia: %f\n", fractal->x_julia, fractal->y_julia);
+	}
 	else
-		throw_error("enter mandelbrot or julia", fractal);
+		throw_error("enter mandelbrot or julia [r] [i]", fractal);
 }
 
 void	throw_error(char *str, t_fractal *fractal)
@@ -70,11 +102,11 @@ t_complex	square_complex(t_complex z)
 }
 
 // SCALE! I have to change the range from [0...WIDTH] and [0...HEIGHT] (window size in pixels) to [-2,2] and [-2,2] (fractal size in real numbers)
-double scale(double unscaled_num, double new_min, double new_max, double old_min, double old_max)
+double scale(double unscaled_num, double old_min, double old_max, double new_min, double new_max)
 {
 	double	scaled_num;
 
-	scaled_num = (new_max - new_min) * (unscaled_num - old_min) / (old_max - old_min) + new_min; // Easy rule of three
+	scaled_num = ((unscaled_num - old_min) * (new_max - new_min) / (old_max - old_min)) + new_min; // Easy rule of three
 	return (scaled_num);
 } 
 
@@ -107,10 +139,10 @@ int	iter_mandel(double x0, double y0)
 	t_complex	c;
 
 	iterations = 0;
-	z.real = x0;
-	z.imag = y0;
-	c.real = -0.382;
-	c.imag = 0.618;
+	z.real = 0;
+	z.imag = 0;
+	c.real = x0;
+	c.imag = y0;
 	while (iterations < ITER)
 	{
 		z = sum_complex(square_complex(z), c);
@@ -138,7 +170,58 @@ void	mandelbrot(t_fractal *fractal)
 			y0 = scale(y, 0, HEIGHT, -2, +2);
 			fractal->iter = iter_mandel(x0, y0);
 			if (fractal->iter < ITER)
+			{
 				mlx_put_pixel(fractal->img, x, y, fractal->palette[fractal->iter % ITER]);
+			}
+			else
+				mlx_put_pixel(fractal->img, x, y, fractal->palette[0]);
+			y++;
+		}
+		x++;
+	}
+}
+
+int	iter_julia(t_fractal *fractal, double x0, double y0)
+{
+	int	iterations;
+	t_complex	z;
+	t_complex	c;
+
+	iterations = 0;
+	z.real = x0;
+	z.imag = y0;
+	c.real = fractal->x_julia;
+	c.imag = fractal->y_julia;
+	while (iterations < ITER)
+	{
+		z = sum_complex(square_complex(z), c);
+		if ((z.real * z.real) + (z.imag * z.imag) > 4)
+			break;
+		++iterations;	
+	}
+	return(iterations);
+}
+
+void	julia(t_fractal *fractal)
+{
+	int	x;
+	int	y;
+	double	x0;
+	double	y0;
+
+	x = 0;
+	while (x < WIDTH)
+	{
+		y = 0;
+		while (y < HEIGHT)
+		{
+			x0 = scale(x, 0, WIDTH, -2, +2);
+			y0 = scale(y, 0, HEIGHT, -2, +2);
+			fractal->iter = iter_julia(fractal, x0, y0);
+			if (fractal->iter < ITER)
+			{
+				mlx_put_pixel(fractal->img, x, y, fractal->palette[fractal->iter % ITER]);
+			}
 			else
 				mlx_put_pixel(fractal->img, x, y, fractal->palette[0]);
 			y++;
@@ -155,8 +238,8 @@ void	render(void *param)
 	fractal = (t_fractal *)param;
 	if (fractal->name == MANDELBROT)
 		mandelbrot(fractal);
-	// else if (fractal->name == JULIA)
-	// 	julia(data); TO DO
+	else if (fractal->name == JULIA)
+		julia(fractal);
 }
 
 

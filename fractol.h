@@ -21,6 +21,7 @@
 #include "LIBFT/libft.h"
 #define WIDTH 1280
 #define HEIGHT 720
+
 #define ITER 200
 
 typedef enum e_sets
@@ -36,6 +37,8 @@ typedef struct s_fractal
 	t_sets		name;
 	int 	iter;
 	uint32_t	palette[ITER];
+	double	x_julia;
+	double	y_julia;
 	
 }	t_fractal;
 
@@ -58,10 +61,13 @@ t_complex	sum_complex(t_complex z_1, t_complex z_2);
 
 t_complex	square_complex(t_complex z);
 
-double scale(double unscaled_num, double new_min, double new_max, double old_min, double old_max);
+double scale(double unscaled_num, double old_min, double old_max, double new_min, double new_max);
 
 void	init_color_palette(t_fractal *fractal);
 
+int	iter_julia(t_fractal *fractal, double x0, double y0);
+
+void	julia(t_fractal *fractal);
 
 int	iter_mandel(double x0, double y0);
 
@@ -69,6 +75,6 @@ void	mandelbrot(t_fractal *fractal);
 
 void	render(void *param);
 
-
+double	ft_atod(const char *str);
 
 #endif
