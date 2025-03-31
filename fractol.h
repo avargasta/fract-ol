@@ -30,6 +30,25 @@ typedef enum e_sets
 	JULIA
 }				t_sets;
 
+typedef struct s_axis
+{
+	double		min;
+	double		max;
+}				t_axis;
+
+typedef struct s_zoom
+{
+	double		x;
+	double		y;
+	double		factor;
+}				t_zoom;
+
+typedef struct s_mouse
+{
+	int32_t		x;
+	int32_t		y;
+}				t_mouse;
+
 typedef struct s_fractal
 {
 	mlx_t	*mlx;
@@ -39,7 +58,11 @@ typedef struct s_fractal
 	uint32_t	palette[ITER];
 	double	x_julia;
 	double	y_julia;
-	
+	bool	renderer_changed;
+	t_axis	x_axis;
+	t_axis	y_axis;
+	t_zoom	zoom;
+	t_mouse	mouse;
 }	t_fractal;
 
 typedef struct s_complex
@@ -48,14 +71,11 @@ typedef struct s_complex
 	double imag;
 }	t_complex;
 
+/* UTILS **************************************************************/
 
-void init(t_fractal *fractal, int argc, char **argv);
-
-void parse_argv(t_fractal *fractal, int argc, char **argv);
+double	ft_atod(const char *str);
 
 void	throw_error(char *str, t_fractal *fractal);
-
-void	start_mlx(mlx_t *mlx, t_fractal *fractal);
 
 t_complex	sum_complex(t_complex z_1, t_complex z_2);
 
@@ -63,7 +83,7 @@ t_complex	square_complex(t_complex z);
 
 double scale(double unscaled_num, double old_min, double old_max, double new_min, double new_max);
 
-void	init_color_palette(t_fractal *fractal);
+/* RENDER **************************************************************/
 
 int	iter_julia(t_fractal *fractal, double x0, double y0);
 
@@ -75,6 +95,30 @@ void	mandelbrot(t_fractal *fractal);
 
 void	render(void *param);
 
-double	ft_atod(const char *str);
+/* ZOOM **************************************************************/
+
+void	update_range(t_axis *axis, double center, double factor);
+
+void	zoom(t_fractal *fractal);
+
+void	update_mouse_pos(t_fractal *fractal);
+
+void	scroll_hook(double xdelta, double ydelta, void *param);
+
+/* CLOSE **************************************************************/
+
+void	close_program(void *param);
+
+void	key_hook(mlx_key_data_t kd, void *param);
+
+/* INIT **************************************************************/
+
+void init(t_fractal *fractal, int argc, char **argv);
+
+void parse_argv(t_fractal *fractal, int argc, char **argv);
+
+void	start_mlx(mlx_t *mlx, t_fractal *fractal);
+
+void	init_color_palette(t_fractal *fractal);
 
 #endif
