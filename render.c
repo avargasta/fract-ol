@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 22:28:21 by root              #+#    #+#             */
-/*   Updated: 2025/03/31 22:35:45 by root             ###   ########.fr       */
+/*   Updated: 2025/04/01 16:03:58 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,15 @@ void	render(void *param)
 	t_fractal	*fractal;
 
 	fractal = (t_fractal *)param;
-	if (fractal->name == MANDELBROT)
-		mandelbrot(fractal);
-	else if (fractal->name == JULIA)
-		julia(fractal);
+	if (fractal->renderer_changed)
+	{
+		if (fractal->name == MANDELBROT)
+			mandelbrot(fractal);
+		else if (fractal->name == JULIA)
+			julia(fractal);
+	}
+	fractal->renderer_changed = false;
+	
 }
 
 int	iter_mandel(double x0, double y0)
@@ -57,8 +62,8 @@ void	mandelbrot(t_fractal *fractal)
 		y = 0;
 		while (y < HEIGHT)
 		{
-			x0 = scale(x, 0, WIDTH, -2, +2);
-			y0 = scale(y, 0, HEIGHT, -2, +2);
+			x0 = scale(x, 0, WIDTH, fractal->x_axis.min, fractal->x_axis.max);
+			y0 = scale(y, 0, HEIGHT, fractal->y_axis.min, fractal->y_axis.max);
 			fractal->iter = iter_mandel(x0, y0);
 			if (fractal->iter < ITER)
 				mlx_put_pixel(fractal->img, x, y, fractal->palette[fractal->iter % ITER]);
@@ -104,8 +109,8 @@ void	julia(t_fractal *fractal)
 		y = 0;
 		while (y < HEIGHT)
 		{
-			x0 = scale(x, 0, WIDTH, -2, +2);
-			y0 = scale(y, 0, HEIGHT, -2, +2);
+			x0 = scale(x, 0, WIDTH, fractal->x_axis.min, fractal->x_axis.max);
+			y0 = scale(y, 0, HEIGHT, fractal->y_axis.min, fractal->y_axis.max);
 			fractal->iter = iter_julia(fractal, x0, y0);
 			if (fractal->iter < ITER)
 				mlx_put_pixel(fractal->img, x, y, fractal->palette[fractal->iter % ITER]);

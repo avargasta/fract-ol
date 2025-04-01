@@ -19,8 +19,8 @@
 #include <string.h>
 #include "MLX42/include/MLX42/MLX42.h"
 #include "LIBFT/libft.h"
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 1250
+#define HEIGHT 1250
 
 #define ITER 200
 
@@ -117,8 +117,11 @@ void init(t_fractal *fractal, int argc, char **argv);
 
 void parse_argv(t_fractal *fractal, int argc, char **argv);
 
+void	construct_fractal(t_fractal *fractal);
+
 void	start_mlx(mlx_t *mlx, t_fractal *fractal);
 
 void	init_color_palette(t_fractal *fractal);
+
 
 #endif

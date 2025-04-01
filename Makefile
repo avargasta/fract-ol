@@ -6,7 +6,7 @@
 #    By: root <root@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/05 21:45:21 by anvargas          #+#    #+#              #
-#    Updated: 2025/03/31 23:59:52 by root             ###   ########.fr        #
+#    Updated: 2025/04/01 15:53:32 by root             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CC := gcc
 CFLAGS := -Wextra -Wall -Wunreachable-code -Ofast
 
 
-SRC := main.c utils.c render.c zoom.c close.c
+SRC := main.c init.c utils.c render.c zoom.c close.c
 OBJ = $(SRC:.c=.o)
 
 
