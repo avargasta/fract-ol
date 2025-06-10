@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 22:32:10 by root              #+#    #+#             */
-/*   Updated: 2025/03/31 22:35:30 by root             ###   ########.fr       */
+/*   Updated: 2025/05/29 21:04:22 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	throw_error(char *str, t_fractal *fractal)
 		mlx_close_window(fractal->mlx);
 		mlx_terminate(fractal->mlx);
 	}
+	exit(1);
 }
 
 t_complex	sum_complex(t_complex z_1, t_complex z_2)

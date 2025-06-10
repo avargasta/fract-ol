@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:33:17 by root              #+#    #+#             */
-/*   Updated: 2025/04/01 16:34:05 by root             ###   ########.fr       */
+/*   Updated: 2025/05/29 21:27:11 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	start_mlx(mlx_t *mlx, t_fractal *fractal)
 {
 	if (!mlx)
 		throw_error("mlx_init failed", fractal);
+	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	fractal->mlx = mlx;
 	fractal->img = mlx_new_image(mlx, WIDTH, HEIGHT);
 	if (!fractal->img)
@@ -74,6 +75,7 @@ void	start_mlx(mlx_t *mlx, t_fractal *fractal)
 
 void init(t_fractal *fractal, int argc, char **argv)
 {
+	ft_bzero(fractal, sizeof(t_fractal));
 	parse_argv(fractal, argc, argv);
     construct_fractal(fractal);
 	start_mlx(mlx_init(WIDTH, HEIGHT, "Fractol", true), fractal);
